@@ -23,11 +23,6 @@ clustPheno <- function(
   if((wideBy == "fieldinst") & length(fieldinst) < 2){
     stop("To cluster by fieldinst we need more than one fieldinst.")
   }
-  # library(caret) # should go into a different cgiar library, has too many dependencies
-  # library('RANN')
-  # library(factoextra) # Begin Partition Around Medoid Clustering
-  # library(NbClust)
-  # library(cluster)
 
   mydata=phenoDTfile$predictions
   mydata <- mydata[which(mydata$fieldinst %in% fieldinst),]
@@ -43,8 +38,6 @@ clustPheno <- function(
   dsm <- cluster::daisy(WsProc[,levelsOfWideBy], metric = "euclidean", stand = FALSE)
   # To create WSS plot to identify number of clusters
   res1 <- factoextra::fviz_nbclust(WsProc[,levelsOfWideBy], cluster::pam, method = method, k.max = kMax)
-  # res1$labels
-  # head(res1$data)
   # end of clustering
   pamRes <- cluster::pam(WsProc[,levelsOfWideBy], kPicked)
   # Add cluster assignments to data
