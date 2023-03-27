@@ -2,6 +2,7 @@ clustPheno <- function(
     phenoDTfile=NULL,
     fieldinst= NULL, # fieldinst= "-"
     traits =NULL, # traits <- unique(mydata$trait);traits
+    wideBy="trait", # column to be used for reshaping
     kMax=30,
     kPicked=5, # to be updated by user while running
     method="wss", # "silhouette"  "gap_stat"
@@ -13,6 +14,9 @@ clustPheno <- function(
   if (is.null(phenoDTfile)) stop("No input phenotypic data file specified.")
   if (is.null(traits)) stop("No traits specified.")
   if (is.null(fieldinst)) stop("No fieldinst specified.")
+  if(length(fieldinst) > 1 & length(traits) >1){
+    stop("We can only handle multiple traits for one field or one trait for multiple fields.")
+  }
   # library(caret) # should go into a different cgiar library, has too many dependencies
   # library('RANN')
   # library(factoextra) # Begin Partition Around Medoid Clustering
@@ -21,20 +25,22 @@ clustPheno <- function(
 
   mydata=phenoDTfile$predictions
   mydata <- mydata[which(mydata$fieldinst %in% fieldinst),]
-  mydataWide <- reshape(mydata[,c("geno","trait","predictedValue")], direction = "wide", idvar = "geno",
-                        timevar = "trait", v.names = "predictedValue", sep= "_")
+  mydata <- mydata[which(mydata$trait %in% traits),]
+  mydataWide <- reshape(mydata[,c("geno",wideBy,"predictedValue")], direction = "wide", idvar = "geno",
+                        timevar = wideBy, v.names = "predictedValue", sep= "_")
   colnames(mydataWide) <- gsub("predictedValue_","",colnames(mydataWide))
   # impute missing values
-  preProcValues <- caret::preProcess(mydataWide[,traits], method = c("knnImpute", "center", "scale"))
+  levelsOfWideBy <- unique(mydata[,wideBy])
+  preProcValues <- caret::preProcess(mydataWide[,levelsOfWideBy], method = c("knnImpute", "center", "scale"))
   WsProc <- predict(preProcValues, mydataWide)
   # build dissimilarity matrix
-  dsm <- cluster::daisy(WsProc[,traits], metric = "euclidean", stand = FALSE)
+  dsm <- cluster::daisy(WsProc[,levelsOfWideBy], metric = "euclidean", stand = FALSE)
   # To create WSS plot to identify number of clusters
-  res1 <- factoextra::fviz_nbclust(WsProc[,traits], pam, method = method, k.max = kMax) + theme_classic()
+  res1 <- factoextra::fviz_nbclust(WsProc[,levelsOfWideBy], pam, method = method, k.max = kMax) + theme_classic()
   res1$labels
   head(res1$data)
   # end of clustering
-  pamRes <- cluster::pam(WsProc[,traits], kPicked)
+  pamRes <- cluster::pam(WsProc[,levelsOfWideBy], kPicked)
   # Add cluster assignments to data
   WsClust <- cbind(WsProc, cluster = pamRes$cluster)
   # then bring back to long format again
