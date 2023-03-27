@@ -43,8 +43,8 @@ clustPheno <- function(
   dsm <- cluster::daisy(WsProc[,levelsOfWideBy], metric = "euclidean", stand = FALSE)
   # To create WSS plot to identify number of clusters
   res1 <- factoextra::fviz_nbclust(WsProc[,levelsOfWideBy], cluster::pam, method = method, k.max = kMax)
-  res1$labels
-  head(res1$data)
+  # res1$labels
+  # head(res1$data)
   # end of clustering
   pamRes <- cluster::pam(WsProc[,levelsOfWideBy], kPicked)
   # Add cluster assignments to data
@@ -80,5 +80,6 @@ clustPheno <- function(
   phenoDTfile$predictions <- mydataRes[,predcols]
   phenoDTfile$metadata <-  db.params
   phenoDTfile$id <- id
+  phenoDTfile$clust <- res1$data
   return(phenoDTfile)
 }
