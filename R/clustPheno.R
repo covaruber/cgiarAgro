@@ -36,7 +36,7 @@ clustPheno <- function(
   # build dissimilarity matrix
   dsm <- cluster::daisy(WsProc[,levelsOfWideBy], metric = "euclidean", stand = FALSE)
   # To create WSS plot to identify number of clusters
-  res1 <- factoextra::fviz_nbclust(WsProc[,levelsOfWideBy], pam, method = method, k.max = kMax) + theme_classic()
+  res1 <- factoextra::fviz_nbclust(WsProc[,levelsOfWideBy], cluster::pam, method = method, k.max = kMax) + theme_classic()
   res1$labels
   head(res1$data)
   # end of clustering
