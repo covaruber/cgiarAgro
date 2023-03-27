@@ -9,7 +9,7 @@ clustPheno <- function(
     verbose=FALSE
 ){
 
-  id <- paste( paste("clu",idGenerator(5,5),sep=""), markerDTfile$idOriginal, sep = "_")
+  id <- paste( paste("clu",cgiarPIPE::idGenerator(5,5),sep=""), phenoDTfile$idOriginal, sep = "_")
   type <- "clu"
   if (is.null(phenoDTfile)) stop("No input phenotypic data file specified.")
   if (is.null(traits)) stop("No traits specified.")
