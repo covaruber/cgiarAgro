@@ -74,7 +74,10 @@ clustPheno <- function(
     cat(paste("Your results will be available in the files_cleaned folder under such id \n"))
   }
 
-  phenoDTfile$predictions <- mydataRes
+  predcols <- c("analysisId", "pipeline","trait","genoCode","geno","mother","father","genoType","genoYearOrigin",
+                "genoYearTesting", "fieldinst","predictedValue","stdError","rel","stage")
+
+  phenoDTfile$predictions <- mydataRes[,predcols]
   phenoDTfile$metadata <-  db.params
   phenoDTfile$id <- id
   return(phenoDTfile)
