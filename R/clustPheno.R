@@ -17,6 +17,12 @@ clustPheno <- function(
   if(length(fieldinst) > 1 & length(traits) >1){
     stop("We can only handle multiple traits for one field or one trait for multiple fields.")
   }
+  if((wideBy == "trait") & length(traits) < 2){
+    stop("To cluster by traits we need more than one trait.")
+  }
+  if((wideBy == "fieldinst") & length(fieldinst) < 2){
+    stop("To cluster by fieldinst we need more than one fieldinst.")
+  }
   # library(caret) # should go into a different cgiar library, has too many dependencies
   # library('RANN')
   # library(factoextra) # Begin Partition Around Medoid Clustering
@@ -70,6 +76,6 @@ clustPheno <- function(
 
   phenoDTfile$predictions <- mydataRes
   phenoDTfile$metadata <-  db.params
-
+  phenoDTfile$id <- id
   return(phenoDTfile)
 }
