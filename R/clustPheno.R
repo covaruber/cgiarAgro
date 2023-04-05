@@ -42,6 +42,12 @@ clustPheno <- function(
   pamRes <- cluster::pam(WsProc[,levelsOfWideBy], kPicked)
   # Add cluster assignments to data
   WsClust <- cbind(WsProc, cluster = pamRes$cluster)
+
+ # Summary statistics of each cluster per Trait
+  des <- psych::describeBy(WsClust[-c(1,length(WsClust))], group=WsClust$cluster, skew=FALSE, mat=T, digits=2)
+  des <- tibble::rownames_to_column(des, "Traits") %>% dplyr::select(-vars,-item) %>%
+    dplyr::rename(Cluster=group1)
+
   # then bring back to long format again
   mydataRes <- merge(mydata, WsClust[,c("geno","cluster")], by="geno", all.x = TRUE)
   mydataRes$genoCode <- mydataRes$cluster
@@ -74,5 +80,6 @@ clustPheno <- function(
   phenoDTfile$metadata <-  db.params
   phenoDTfile$id <- id
   phenoDTfile$clust <- res1$data
+  phenoDTfile$des <- des
   return(phenoDTfile)
 }
