@@ -34,13 +34,20 @@ clustPheno <- function(
   levelsOfWideBy <- unique(mydata[,wideBy])
   preProcValues <- caret::preProcess(mydataWide[,levelsOfWideBy], method = c("knnImpute", "center", "scale"))
   WsProc <- predict(preProcValues, mydataWide)
+
   # build dissimilarity matrix
   dsm <- cluster::daisy(WsProc[,levelsOfWideBy], metric = "euclidean", stand = FALSE)
+
   # To create WSS plot to identify number of clusters
   res1 <- factoextra::fviz_nbclust(WsProc[,levelsOfWideBy], cluster::pam, method = method, k.max = kMax)
+
   # end of clustering
   pamRes <- cluster::pam(WsProc[,levelsOfWideBy], kPicked)
-  # Add cluster assignments to data
+
+  # Graph to be viewed in bvisual
+  pamPlt <- factoextra::eclust(WsProc[,levelsOfWideBy], "pam", k = kPicked, hc_metric="euclidean") #plotting of clusters
+
+    # Add cluster assignments to data
   WsClust <- cbind(WsProc, cluster = pamRes$cluster)
 
  # Summary statistics of each cluster per Trait
@@ -81,5 +88,8 @@ clustPheno <- function(
   phenoDTfile$id <- id
   phenoDTfile$clust <- res1$data
   phenoDTfile$des <- des
+  phenoDTfile$member <- WsClust
+  phenoDTfile$clust2 <- pamPlt$clust_plot
+
   return(phenoDTfile)
 }
