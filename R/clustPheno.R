@@ -8,8 +8,10 @@ clustPheno <- function(
     method="wss", # "silhouette"  "gap_stat"
     verbose=FALSE
 ){
-
+  suppressPackageStartupMessages(suppressWarnings(library(dplyr)))
+  # set.seed(sample(1:500,1))
   id <- paste( paste("clu",cgiarPIPE::idGenerator(5,5),sep=""), phenoDTfile$idOriginal, sep = "_")
+
   type <- "clu"
   if (is.null(phenoDTfile)) stop("No input phenotypic data file specified.")
   if (is.null(traits)) stop("No traits specified.")
@@ -45,7 +47,7 @@ clustPheno <- function(
   pamRes <- cluster::pam(WsProc[,levelsOfWideBy], kPicked)
 
   # Graph to be viewed in bvisual
-  pamPlt <- factoextra::eclust(WsProc[,levelsOfWideBy], "pam", k = kPicked, hc_metric="euclidean") #plotting of clusters
+  # pamPlt <- factoextra::eclust(WsProc[,levelsOfWideBy], "pam", k = kPicked, hc_metric="euclidean") #plotting of clusters
 
     # Add cluster assignments to data
   WsClust <- cbind(WsProc, cluster = pamRes$cluster)
@@ -83,13 +85,13 @@ clustPheno <- function(
   predcols <- c("analysisId", "pipeline","trait","genoCode","geno","mother","father","genoType","genoYearOrigin",
                 "genoYearTesting", "fieldinst","predictedValue","stdError","rel","stage")
 
+
   phenoDTfile$predictions <- mydataRes[,predcols]
   phenoDTfile$metadata <-  db.params
   phenoDTfile$id <- id
   phenoDTfile$clust <- res1$data
   phenoDTfile$des <- des
   phenoDTfile$member <- WsClust
-  phenoDTfile$clust2 <- pamPlt$clust_plot
-
+  phenoDTfile$clust2 <- list(x = WsProc[,levelsOfWideBy], k = kPicked)
   return(phenoDTfile)
 }
