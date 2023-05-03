@@ -53,7 +53,16 @@ meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
   interval <- "PT1H"
   
   ## Specify the parameter(s) of interest
-  parameters <- list("t_2m:C", "dew_point_2m:C", "relative_humidity_1000hPa:p", "precip_1h:mm")
+  parameters <- list("wind_speed_10m:ms", # "wind_dir_10m:d",
+                     "wind_gusts_10m_24h:ms", # "wind_gusts_10m_1h:ms",
+                     "t_2m:C", "t_max_2m_24h:C", "t_min_2m_24h:C", 
+                     "msl_pressure:hPa",
+                     "precip_24h:mm", # "precip_1h:mm",
+                     "relative_humidity_1000hPa:p",
+                     # "sunrise:sql","sunset:sql",
+                     "dew_point_2m:C",
+                     "uv:idx"
+                     )
   
   ## Call the MeteomaticsRConnector::query_time_series() function
   wdata0 <- MeteomaticsRConnector::query_time_series(coordinates, startdate, enddate, interval, parameters,
@@ -68,8 +77,8 @@ meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
   colnames(wdataDf)[1:6] <- c("year","month","day","hour","minute","second")
   ## come up with aggregated data for each fieldinst
   wdata2 <- merge(wdataDf,mydata, by.x = c("lat","lon"), by.y = c("latitude","longitude"), all.x = TRUE)
-  myFormula <- paste("cbind(", paste(c( "t_2mC", "dew_point_2mC", "relative_humidity_1000hPap", "precip_1hmm"), collapse = ","),")~fieldinst")
-  aggregatedWdata <- aggregate(as.formula(myFormula), data=wdata2, FUN=mean)
+  myFormula <- paste("cbind(", paste(gsub(":","",unlist(parameters)), collapse = ","),")~fieldinst")
+  aggregatedWdata <- aggregate(as.formula(myFormula), data=wdata2, FUN=function(x){mean(x, na.rm=TRUE)})
   ## merge environmental summaries to metadata
   metadataFieldinst <- merge(mydata,aggregatedWdata, by="fieldinst", all.x = TRUE )
   
