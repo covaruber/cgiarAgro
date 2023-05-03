@@ -58,10 +58,10 @@ meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
   ## Call the MeteomaticsRConnector::query_time_series() function
   wdata0 <- MeteomaticsRConnector::query_time_series(coordinates, startdate, enddate, interval, parameters,
                           username, password)
-  colnames(wdata) <- gsub(":","",colnames(wdata))
+  colnames(wdata0) <- gsub(":","",colnames(wdata0))
   
-  myDates <- lapply(strsplit(as.character(wdata$validdate), split=" "), function(x){x[1]})
-  myTimes <- lapply(strsplit(as.character(wdata$validdate), split=" "), function(x){x[2]})
+  myDates <- lapply(strsplit(as.character(wdata0$validdate), split=" "), function(x){x[1]})
+  myTimes <- lapply(strsplit(as.character(wdata0$validdate), split=" "), function(x){x[2]})
   myDatesDf <- as.data.frame(do.call(rbind, lapply(myDates, function(x){strsplit(x,"-")[[1]]}) ) )
   myHoursDf <- as.data.frame(do.call(rbind, lapply(myTimes, function(x){strsplit(x,":")[[1]]}) ) )
   wdataDf <- cbind(myDatesDf,myHoursDf,wdata0)
