@@ -1,6 +1,6 @@
 meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
   
-  id <- paste( paste("wea",cgiarPIPE::idGenerator(5,5),sep=""), phenoDTfile$idOriginal, sep = "_")
+  id <- paste( paste("wea",cgiarPIPE::idGenerator(5,5),sep=""), "meteomatics", sep = "_")
   type <- "wea"
   if(is.null(phenoDTfile)){stop("Please provide the name of the analysis to locate the predictions", call. = FALSE)}
   if(length(grep("clp",phenoDTfile$id)) == 0){stop("Index can only be calculated on results from a MET analysis using across environment predictions",call. = FALSE)}
