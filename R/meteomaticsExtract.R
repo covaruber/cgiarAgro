@@ -9,14 +9,17 @@ meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
   # loading the dataset
   if(is.null(phenoDTfile$metadataFieldinst)){stop("There's no metadata for this file. Likely belongs to an older version of the cgiarPIPE package. Please match the columns of your data again.", call. = FALSE)}
   mydata <- phenoDTfile$metadataFieldinst # readRDS(file.path(wd,"predictions",paste0(phenoDTfile)))
+  mydata$latitude <- round(mydata$latitude,2)
+  mydata$longitude <- round(mydata$longitude,2)
+  
   ############################
   ## index calculation
   
-  badLats <- which(mydata$latitude == 1)
-  badLons <- which(mydata$longitude == 1)
-  if(length(badLats) > 0  | length(badLons) > 0){
-    stop("You have provided latitudes and longitudes with value equal to 1. Please provide valid latitudes and longitudes to extract weather data.", call. = FALSE)
-  }
+  # badLats <- which(mydata$latitude == 1)
+  # badLons <- which(mydata$longitude == 1)
+  # if(length(badLats) > 0  | length(badLons) > 0){
+  #   stop("You have provided latitudes and longitudes with value equal to 1. Please provide valid latitudes and longitudes to extract weather data.", call. = FALSE)
+  # }
   ###########################
   ## extract data
   username <- 'irri_covarrubias'
@@ -65,9 +68,22 @@ meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
                      )
   
   ## Call the MeteomaticsRConnector::query_time_series() function
-  wdata0 <- MeteomaticsRConnector::query_time_series(coordinates, startdate, enddate, interval, parameters,
-                          username, password)
+  
+  start <- seq(1,length(coordinates),300)
+  end <- start-1; end <- end[-1]; end <- c(end, length(coordinates)); end <- unique(end)
+
+  wdataList <- list()
+  for(i in 1:length(start)){
+    iCoords <- coordinates[start[i]:end[i]]
+    wdataList[[i]] <- MeteomaticsRConnector::query_time_series(iCoords, startdate, enddate, interval, parameters,
+                                                       username, password)
+  }
+  wdata0 <- do.call(rbind, wdataList)
+  
+  # wdata0 <- MeteomaticsRConnector::query_time_series(coordinates, startdate, enddate, interval, parameters, username, password)
+  
   colnames(wdata0) <- gsub(":","",colnames(wdata0))
+  
   
   myDates <- lapply(strsplit(as.character(wdata0$validdate), split=" "), function(x){x[1]})
   myTimes <- lapply(strsplit(as.character(wdata0$validdate), split=" "), function(x){x[2]})
