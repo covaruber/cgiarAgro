@@ -1,4 +1,4 @@
-meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
+meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE, interval="PT12H"){
   
   id <- paste( paste("wea",cgiarPIPE::idGenerator(5,5),sep=""), "meteomatics", sep = "_")
   type <- "wea"
@@ -12,14 +12,6 @@ meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
   mydata$latitude <- round(mydata$latitude,2)
   mydata$longitude <- round(mydata$longitude,2)
   
-  ############################
-  ## index calculation
-  
-  # badLats <- which(mydata$latitude == 1)
-  # badLons <- which(mydata$longitude == 1)
-  # if(length(badLats) > 0  | length(badLons) > 0){
-  #   stop("You have provided latitudes and longitudes with value equal to 1. Please provide valid latitudes and longitudes to extract weather data.", call. = FALSE)
-  # }
   ###########################
   ## extract data
   username <- 'irri_covarrubias'
@@ -29,31 +21,31 @@ meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE){
   l2 <- as.list(mydata$longitude)
   coordinates <- mapply(c, l1, l2, SIMPLIFY=FALSE)
   
-  # startdate0 <- as.Date(min(mydata$plantingDate))
-  # enddate0 <- as.Date(max(mydata$harvestingDate))
-  # startdate1 <- min(c(startdate0,enddate0))
-  # enddate1 <- max(c(startdate0,enddate0))
-  # ## Specify the start and end date
-  # startdate <- ISOdatetime(year = as.integer(strftime(startdate1, '%Y')),
-  #                          month = as.integer(strftime(startdate1, '%m')),
-  #                          day = as.integer(strftime(startdate1, '%d')),
-  #                          hour = 00, min = 00, sec = 00, tz = 'UTC')
-  # enddate <- ISOdatetime(year = as.integer(strftime(enddate1, '%Y')),
-  #                        month = as.integer(strftime(enddate1, '%m')),
-  #                        day = as.integer(strftime(enddate1, '%d')) + 1,
-  #                        hour = 00, min = 00, sec = 00, tz = 'UTC')
-  
-  startdate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
-                           month = as.integer(strftime(lubridate::today(), '%m')),
-                           day = as.integer(strftime(lubridate::today(), '%d')),
+  startdate0 <- as.Date(min(mydata$plantingDate))
+  enddate0 <- as.Date(max(mydata$harvestingDate))
+  startdate1 <- min(c(startdate0,enddate0))
+  enddate1 <- max(c(startdate0,enddate0))
+  ## Specify the start and end date
+  startdate <- ISOdatetime(year = as.integer(strftime(startdate1, '%Y')),
+                           month = as.integer(strftime(startdate1, '%m')),
+                           day = as.integer(strftime(startdate1, '%d')),
                            hour = 00, min = 00, sec = 00, tz = 'UTC')
-  enddate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
-                         month = as.integer(strftime(lubridate::today(), '%m')),
-                         day = as.integer(strftime(lubridate::today(), '%d')) + 1,
+  enddate <- ISOdatetime(year = as.integer(strftime(enddate1, '%Y')),
+                         month = as.integer(strftime(enddate1, '%m')),
+                         day = as.integer(strftime(enddate1, '%d')) + 1,
                          hour = 00, min = 00, sec = 00, tz = 'UTC')
   
+  # startdate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+  #                          month = as.integer(strftime(lubridate::today(), '%m')),
+  #                          day = as.integer(strftime(lubridate::today(), '%d')),
+  #                          hour = 00, min = 00, sec = 00, tz = 'UTC')
+  # enddate <- ISOdatetime(year = as.integer(strftime(lubridate::today(), '%Y')),
+  #                        month = as.integer(strftime(lubridate::today(), '%m')),
+  #                        day = as.integer(strftime(lubridate::today(), '%d')) + 1,
+  #                        hour = 00, min = 00, sec = 00, tz = 'UTC')
+  
   ## Specify a time interval
-  interval <- "PT1H"
+  # interval <- "PT1H"
   
   ## Specify the parameter(s) of interest
   parameters <- list("wind_speed_10m:ms", # "wind_dir_10m:d",

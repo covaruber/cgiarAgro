@@ -4,8 +4,8 @@ sampleCoordinates <- function(  lat=NULL, lon=NULL, nSample=100,
   if(is.null(lat)){stop("Please provide the latitude vector", call. = FALSE)}
   if(is.null(lon)){stop("Please provide the longitude vector", call. = FALSE)}
   if(length(lat) != length(lon)){stop("Latitude and longitude vector should have equal length", call. = FALSE)}
-  if(is.null(startDate)){startDate = Sys.Date()-(365*4)}
-  if(is.null(endDate)){endDate = startDate-10}
+  if(is.null(endDate)){endDate = Sys.Date()-1}
+  if(is.null(startDate)){startDate = endDate-10}
   
   lat <- sort(lat)
   lon <- sort(lon)
