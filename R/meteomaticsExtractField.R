@@ -5,7 +5,7 @@ meteomaticsExtractField <- function(phenoDTfile= NULL, verbose=FALSE, interval="
   if(is.null(phenoDTfile)){stop("Please provide the name of the analysis to locate the predictions", call. = FALSE)}
   if(length(grep("clp",phenoDTfile$id)) == 0){stop("This function can only be used in matched phenotypic files",call. = FALSE)}
   
-  ############################
+  ##############################
   # loading the dataset
   if(is.null(phenoDTfile$metadataFieldinst)){stop("There's no metadata for this file. Likely belongs to an older version of the cgiarPIPE package. Please match the columns of your data again.", call. = FALSE)}
   mydata <- phenoDTfile$metadataFieldinst # readRDS(file.path(wd,"predictions",paste0(phenoDTfile)))
