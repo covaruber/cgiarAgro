@@ -6,7 +6,7 @@ Date: 2022-09-09
 Author: Giovanny Covarrubias-Pazaran
 Maintainer: Giovanny Covarrubias-Pazaran <covaruberpaz@gmail.com>
 Description: Software for analytical pipelines (agronomics) including weather information
-Depends: R (>= 3.5.0), httr, data.table, lubridate, stringr, jsonlite, sets, tidyr, utils, rlist
+Depends: R (>= 3.5.0), httr, data.table, lubridate, stringr, jsonlite, sets, tidyr, utils, rlist, dplyr, psych, tibble
 License: GPL (>= 2)
 Imports: stats, graphics, grDevices
 Suggests: cgiarPIPE, MeteomaticsRConnector
