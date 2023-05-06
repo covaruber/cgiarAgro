@@ -1,6 +1,6 @@
 Package: cgiarAgro
 Type: Package
-Title: Base functions for biometrics analysis in agronomic experiments
+Title: Base functions for biometrics analysis in agronomic experiments.
 Version: 1.0.1
 Date: 2022-09-09
 Author: Giovanny Covarrubias-Pazaran
