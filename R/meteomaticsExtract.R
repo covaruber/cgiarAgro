@@ -89,7 +89,7 @@ meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE, interval="PT12H
   aggregatedWdata <- aggregate(as.formula(myFormula), data=wdata2, FUN=function(x){mean(x, na.rm=TRUE)})
   ## merge environmental summaries to metadata
   metadataFieldinst <- merge(mydata,aggregatedWdata, by="fieldinst", all.x = TRUE )
-  
+  wdataDf$fieldinst <- "none"
   ## write the parameters to the parameter database
   db.params <- data.frame(
     analysisId	= id,
