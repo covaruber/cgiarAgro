@@ -83,6 +83,7 @@ meteomaticsExtractField <- function(phenoDTfile= NULL, verbose=FALSE, interval="
   wdataDf <- cbind(myDatesDf,myHoursDf,wdata0)
   colnames(wdataDf)[1:6] <- c("year","month","day","hour","minute","second")
   ## come up with aggregated data for each fieldinst
+  mydata <- mydata[,setdiff(colnames(mydata), colnames(wdataDf))]
   wdata2 <- merge(wdataDf,mydata, by.x = c("lat","lon"), by.y = c("latitude","longitude"), all.x = TRUE)
   myFormula <- paste("cbind(", paste(gsub(":","",unlist(parameters)), collapse = ","),")~fieldinst")
   aggregatedWdata <- aggregate(as.formula(myFormula), data=wdata2, FUN=function(x){mean(x, na.rm=TRUE)})
@@ -140,7 +141,7 @@ meteomaticsExtractField <- function(phenoDTfile= NULL, verbose=FALSE, interval="
     cat(paste("Your analysis id is:",id,"\n"))
   }
   result <- list(metrics=pm, predictions=NA, modeling=mod, metadata=db.params,
-                 cleaned=wdataDf, outliers=NA, desire=NA, id=id, idOriginal=phenoDTfile$idOriginal,
+                 cleaned=wdata2, outliers=NA, desire=NA, id=id, idOriginal=phenoDTfile$idOriginal,
                  metadataFieldinst=metadataFieldinst
   )
   return(result)

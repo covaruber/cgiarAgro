@@ -3,7 +3,8 @@ importFrom("graphics", "axis", "lines", "par", "points", "title")
 importFrom("stats", "cov", "dist", "median", "model.matrix", "optimize", "pbeta", "ppoints", "predict", "smooth.spline","var",
            "aggregate", "as.formula", "reshape", "rpois")
 export(clustPheno, clustGeno, clustSTPGA,
-       meteomaticsExtract, meteomaticsExtractField, sampleCoordinates
+       meteomaticsExtract, meteomaticsExtractField, sampleCoordinates,
+       erm
        )
 
 
