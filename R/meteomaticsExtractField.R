@@ -26,8 +26,8 @@ meteomaticsExtractField <- function(phenoDTfile= NULL, verbose=FALSE, interval="
   
   ###########################
   ## extract data
-  username <- 'irri_covarrubias'
-  password <- 'wG55H37mxF'
+  username <- 'iwmi_mona' # 'irri_covarrubias'
+  password <- '4hBacAU3u3'# 'wG55H37mxF'
   
   l1 <- as.list(mydata$latitude)
   l2 <- as.list(mydata$longitude)
