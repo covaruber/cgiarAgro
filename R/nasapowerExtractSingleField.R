@@ -47,7 +47,7 @@ nasapowerExtractSingleField <- function(phenoDTfile= NULL, verbose=FALSE, interv
       community = "ag",
       lonlat = c(mydata$longitude[i], mydata$latitude[i]),
       pars = parameters,
-      dates = c(mydata$plantingDate, mydata$harvestingDate),
+      dates = c(mydata$plantingDate[i], mydata$harvestingDate[i]),
       temporal_api = interval
     )
     wdataList[[i]]$fieldinst <- mydata$fieldinst[i]
