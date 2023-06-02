@@ -2,7 +2,7 @@ nasapowerExtractRegion <- function(west= NULL, east=NULL, south=NULL, north=NULL
                                    initialDateVal=NULL, finalDateVal=NULL,
                                    verbose=FALSE, interval="daily"){
   
-  id <- paste( paste("wea",cgiarPIPE::idGenerator(5,5),sep=""), "nasapower", sep = "_")
+  id <- paste( paste("wea",cgiarPIPE::idGenerator(5,5),sep=""), "nasapowerRegion", sep = "_")
   type <- "wea"
   if(is.null(west) | is.null(east) | is.null(south) | is.null(north)){stop("Please provide the coordinates for all points", call. = FALSE)}
   if(space > 4.5){stop("grids cannot be larger than 4.5 x 4.5 degrees", call. = FALSE)}
