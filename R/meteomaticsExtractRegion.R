@@ -1,4 +1,4 @@
-meteomaticsExtract <- function(phenoDTfile= NULL, verbose=FALSE, interval="PT12H"){
+meteomaticsExtractRegion <- function(phenoDTfile= NULL, verbose=FALSE, interval="PT12H"){
   
   id <- paste( paste("wea",cgiarPIPE::idGenerator(5,5),sep=""), "meteomatics", sep = "_")
   type <- "wea"
