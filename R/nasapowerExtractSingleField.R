@@ -54,14 +54,14 @@ nasapowerExtractSingleField <- function(phenoDTfile= NULL, verbose=FALSE, interv
   }
   wdataDf <- do.call(rbind, wdataList)
   colnames(wdataDf) <- gsub(":","",colnames(wdataDf))
-  colnames(wdataDf)[1:7] <- c("lat","lon","year","month","day","dayOfYear", "date")
+  colnames(wdataDf)[1:7] <- c("latitude","longitude","year","month","day","dayOfYear", "date")
   missing <- apply(wdataDf,2,function(x){length(which(is.na(x)))/length(x)})
   keep <- which(missing < .8)
   parameters <- intersect(parameters,names(keep))
   wdataDf <- wdataDf[,keep]
   ## come up with aggregated data for each fieldinst
-  mydata <- mydata[,setdiff(colnames(mydata), setdiff( colnames(wdataDf), "fieldinst"))]
-  wdata2 <- merge(wdataDf,mydata, by.x = c("lat","lon","fieldinst"), by.y = c("latitude","longitude","fieldinst"), all.x = TRUE)
+  mydata <- mydata[,setdiff(colnames(mydata), setdiff( colnames(wdataDf), c("fieldinst","latitude","longitude")))] # in case we are rerunning avoid replication of columns
+  wdata2 <- merge(wdataDf,mydata, by.x = c("latitude","longitude","fieldinst"), by.y = c("latitude","longitude","fieldinst"), all.x = TRUE)
   myFormula <- paste("cbind(", paste(gsub(":","",unlist(parameters)), collapse = ","),")~fieldinst")
   aggregatedWdata <- aggregate(as.formula(myFormula), data=wdata2, FUN=function(x){mean(x, na.rm=TRUE)})
   ## merge environmental summaries to metadata
