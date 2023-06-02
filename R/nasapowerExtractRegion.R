@@ -71,7 +71,7 @@ nasapowerExtractRegion <- function(west= NULL, east=NULL, south=NULL, north=NULL
     analysisId	= id,
     analysisType =	type,
     fieldbooks	= NA,
-    phenoDataFile =	phenoDTfile$id,
+    phenoDataFile ="none",
     markerbooks	= NA,  markerDataFile =	NA,
     timePoint = NA,  season =	NA,  location =	NA,
     country	= NA,  trial	= NA,  design =	NA,
